@@ -1,0 +1,21 @@
+import math
+
+def funkcja(t):
+    return 2510 * math.log(1 / (1 - 0.00475 * t)) - 9.81 * t - 335
+
+def pochodna(t):
+    return 2510 * 0.00475 / (1 - 0.00475 * t) - 9.81
+
+def Newton(funckja, pochodna, x0):
+    kolejny_x = x0
+    blad = 0.001
+    
+    while abs(funkcja(kolejny_x) > blad):
+        kolejny_x = kolejny_x - (funkcja(kolejny_x)/pochodna(kolejny_x))
+    
+    if abs(funkcja(kolejny_x)) <= blad:
+        return kolejny_x
+    else:
+        raise ValueError("Zły punkt x0. Metoda nie zbiega do rozwiązania.")
+    
+print("Rakieta osiągnie prędkosć dźwięku po czasie t =", Newton(funkcja, pochodna, 80), "[s]")

@@ -1,0 +1,34 @@
+import math
+
+# Podane stałe w zadaniu
+sigma_max = 120e6  # Pa (max cisnienie)
+A = 0.0258  # m^2 (przekrój poprzeczny kolumny)
+e = 0.085  # m (ekscentryczność obciążenia)
+c = 0.17  # m (polowa glebokosci kolumny)
+r = 0.142  # m (promien przekroju poprzecznego)
+L = 7.1  # m (długość kolumny)
+E = 71e9  # Pa (moduł sprezystosci)
+
+# Początkowe przybliżenie dla P
+P = 1000  # Rozpocząłem od założonia wartości obciazenia osiowego rownego 1000 na metr kwadratowy przy ciśnieniu normalnym
+
+# Tolerancja dla zbieżności im mniejsza tym wynik bardziej wiarygodny
+tolerancja = 1e-6
+
+while True:
+    # Obliczam średnie naprężenie
+    stress_avg = P / A
+
+    # Obliczam wartość wewnątrz funkcji sec
+    sec_arg = (L / (2 * r)) * math.sqrt(stress_avg / E)
+
+    # Obliczam zaktualizowane P za pomocą wzoru secant
+    nowe_P = stress_avg * A / (1 + (e * c) / (r ** 2) * (1 / math.cos(sec_arg)))
+
+    # Sprawdzam, czy zmiana w P mieści się w tolerancji
+    if abs(nowe_P - P) < tolerancja:
+        break
+
+    P = nowe_P  
+
+print("Maksymalne obciążenie, które kolumna może udźwignąć, to około", P, "N")

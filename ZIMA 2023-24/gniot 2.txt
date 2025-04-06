@@ -1,0 +1,48 @@
+import numpy as np
+
+# Przypisałem zmienne "k" i "m"
+k = 75
+m = 2.5
+
+# Definicja funkcji Q(t)
+def Q(t):
+    if t < 2:
+        return 10. * t
+    else:
+        return 20.
+
+# Definicja funkcji F(t, y)
+def F(t, y):
+    dydt = [y[1], Q(t)/m - (k/m) * y[0]]
+    return dydt
+
+# Metoda runge-kutty 4 rzędu
+def runge_kutta(h, t, y):
+    k1 = h * np.array(F(t, y))
+    k2 = h * np.array(F(t + 0.5 * h, y + 0.5 * k1))
+    k3 = h * np.array(F(t + 0.5 * h, y + 0.5 * k2))
+    k4 = h * np.array(F(t + h, y + k3))
+    return y + (k1 + 2 * k2 + 2 * k3 + k4) / 6
+
+# Przypisałem wartości początkowe
+y0 = np.array([0.0, 0.0])
+t_span = (0.0, 6.0)
+h = 0.01
+
+# Inicjalizuj listy do przechowywania wyników
+t_values = np.arange(t_span[0], t_span[1] + h, h)
+y_values = []
+
+# Implementacja metody runge-kutty 4 rzędu
+for t in t_values:
+    y_values.append(y0)
+    y0 = runge_kutta(h, t, y0)
+
+# Wydruk wyników
+print("   x       y[0]      y[1]")
+for i in range(len(t_values)):
+    print(f"{t_values[i]:.4e}  {y_values[i][0]:.4e}  {y_values[i][1]:.4e}")
+
+# Wykres 
+for y_val in np.array(y_values)[:, 0]:
+    print("*" * int(y_val * 100))

@@ -1,1 +1,1 @@
-# Metody Obliczeniowe Fizyki Lato 2023/24
+# Metody Obliczeniowe Fizyki Zima 2023/24, Lato 2023/24
